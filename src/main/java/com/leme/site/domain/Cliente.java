@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Cliente implements Serializable {
@@ -20,6 +22,12 @@ public class Cliente implements Serializable {
 	private String email;
 	private String telefone;
 	private String endereco;
+	
+	@ManyToOne
+	@JoinColumn(name="pedido")
+	private Pedido pedido;
+	
+	
 	
 	public Cliente() {		
 	}
@@ -81,6 +89,15 @@ public class Cliente implements Serializable {
 	public void setEndereco(String endereco) {
 		this.endereco = endereco;
 	}
+	
+	public Pedido getPedido() {
+		return pedido;
+	}
+
+	public void setPedido(Pedido pedido) {
+		this.pedido = pedido;
+	}
+
 
 	@Override
 	public int hashCode() {

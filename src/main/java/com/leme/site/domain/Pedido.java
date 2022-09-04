@@ -1,13 +1,17 @@
 package com.leme.site.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 
 @Entity
 public class Pedido implements Serializable {
@@ -19,15 +23,30 @@ public class Pedido implements Serializable {
 	private Date dtPedido;
 	private Double valorPedido;
 	
+	@OneToOne
+	@JoinColumn(name="pagamento_id")
+	private List<Pagamento> pagamento = new ArrayList<>(); 
+	
 	public Pedido() {
 		
 	}
 
-	public Pedido(Integer id, Date dtPedido, double valorPedido) {
+	public Pedido(Integer id, Date dtPedido, double valorPedido, Pagamento pagamento) {
 		super();
 		this.id = id;
 		this.dtPedido = dtPedido;
 		this.valorPedido = valorPedido;
+		this.valorPedido = valorPedido;
+		this.pagamento = (List<Pagamento>) pagamento;
+		}
+	
+
+	public Pagamento getPagamento() {
+		return (Pagamento)pagamento;
+	}
+
+	public void setPagamento(Pagamento pagamento) {
+		this.pagamento = (List<Pagamento>) pagamento;
 	}
 
 	public Integer getId() {
@@ -53,6 +72,7 @@ public class Pedido implements Serializable {
 	public void setValorPedido(double valorPedido) {
 		this.valorPedido = valorPedido;
 	}
+	
 
 	@Override
 	public int hashCode() {
