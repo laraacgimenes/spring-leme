@@ -1,20 +1,30 @@
 package com.leme.site.domain;
 
-import java.io.Serializable;
 import java.util.Date;
-import java.util.Objects;
 
 import javax.persistence.Entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.leme.site.domain.enums.EstadoPagamento;
+
 @Entity
-public class PagamentoComBoleto implements Serializable {
+@JsonTypeName("pagamentoComBoleto")
+public class PagamentoComBoleto extends Pagamento {
 	private static final long serialVersionUID = 1L;
 	
+	@JsonFormat(pattern="dd/MM/yyyy")
 	private Date dataVencimento;
+	@JsonFormat(pattern="dd/MM/yyyy")
 	private Date dataPagamento;
 	
 	public PagamentoComBoleto() {
-		
+	}
+
+	public PagamentoComBoleto(Integer id, EstadoPagamento estado, Pedido pedido, Date dataVencimento, Date dataPagamento) {
+		super(id, estado, pedido);
+		this.dataVencimento = dataVencimento;
+		this.dataPagamento = dataPagamento;
 	}
 
 	public Date getDataVencimento() {
@@ -31,27 +41,5 @@ public class PagamentoComBoleto implements Serializable {
 
 	public void setDataPagamento(Date dataPagamento) {
 		this.dataPagamento = dataPagamento;
-	}
-
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(dataPagamento, dataVencimento);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		PagamentoComBoleto other = (PagamentoComBoleto) obj;
-		return Objects.equals(dataPagamento, other.dataPagamento)
-				&& Objects.equals(dataVencimento, other.dataVencimento);
-	}
+	}	
 }

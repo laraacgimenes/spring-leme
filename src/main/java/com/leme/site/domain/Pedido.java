@@ -1,52 +1,65 @@
 package com.leme.site.domain;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Pedido implements Serializable {
 	private static final long serialVersionUID = 1L;
+
+	private static final ItemPedido[] Itens = null;
 	
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY) 
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
-	private Date dtPedido;
-	private Double valorPedido;
 	
-	@OneToOne
-	@JoinColumn(name="pagamento_id")
-	private List<Pagamento> pagamento = new ArrayList<>(); 
+	@JsonFormat(pattern="dd/MM/yyyy HH:mm")
+	private Date instante;
+	
+	@JsonIgnore
+	@OneToOne(cascade=CascadeType.ALL, mappedBy="pedido")
+	private Pagamento pagamento;
+	
+	@JsonIgnore
+	@ManyToOne
+	@JoinColumn(name="cliente_id")
+	private Cliente cliente;
+	
+	@OneToMany(mappedBy="id.pedido")
+	private Set<ItemPedido> itens = new HashSet<>();
 	
 	public Pedido() {
-		
 	}
 
-	public Pedido(Integer id, Date dtPedido, double valorPedido, Pagamento pagamento) {
+	public Pedido(Integer id, Date instante, Cliente cliente) {
 		super();
 		this.id = id;
-		this.dtPedido = dtPedido;
-		this.valorPedido = valorPedido;
-		this.valorPedido = valorPedido;
-		this.pagamento = (List<Pagamento>) pagamento;
-		}
-	
-
-	public Pagamento getPagamento() {
-		return (Pagamento)pagamento;
+		this.instante = instante;
+		this.cliente = cliente;
 	}
-
-	public void setPagamento(Pagamento pagamento) {
-		this.pagamento = (List<Pagamento>) pagamento;
+	
+	public double getValorTotal() {
+		double soma = 0.0;
+		for (ItemPedido ip : Itens) {
+			soma = soma + ip.getSubtotal();
+		}
+		return soma;
 	}
 
 	public Integer getId() {
@@ -57,26 +70,41 @@ public class Pedido implements Serializable {
 		this.id = id;
 	}
 
-	public Date getDtPedido() {
-		return dtPedido;
+	public Date getInstante() {
+		return instante;
 	}
 
-	public void setDtPedido(Date dtPedido) {
-		this.dtPedido = dtPedido;
+	public void setInstante(Date instante) {
+		this.instante = instante;
 	}
 
-	public double getValorPedido() {
-		return valorPedido;
+	public Pagamento getPagamento() {
+		return pagamento;
 	}
 
-	public void setValorPedido(double valorPedido) {
-		this.valorPedido = valorPedido;
+	public void setPagamento(Pagamento pagamento) {
+		this.pagamento = pagamento;
+	}
+
+	public Cliente getCliente() {
+		return cliente;
+	}
+
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
 	}
 	
+	public Set<ItemPedido> getItens() {
+		return itens;
+	}
+
+	public void setItens(Set<ItemPedido> itens) {
+		this.itens = itens;
+	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(dtPedido, id, valorPedido);
+		return Objects.hash(id);
 	}
 
 	@Override
@@ -88,10 +116,6 @@ public class Pedido implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Pedido other = (Pedido) obj;
-		return Objects.equals(dtPedido, other.dtPedido) && Objects.equals(id, other.id)
-				&& Double.doubleToLongBits(valorPedido) == Double.doubleToLongBits(other.valorPedido);
+		return Objects.equals(id, other.id);
 	}
-	
-	
-
 }

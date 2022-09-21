@@ -4,37 +4,41 @@ import java.io.Serializable;
 import java.util.Objects;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
+import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.leme.site.domain.enums.EstadoPagamento;
+
 @Entity
-public class Pagamento implements Serializable {
+@Inheritance(strategy=InheritanceType.JOINED)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "@type")
+public abstract class Pagamento implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY) 
 	private Integer id;
-	private Double estado;
+	private Integer estado;
 	
-	
-	@OneToOne 
-	@JoinColumn(name="pedido")
+	@JsonIgnore
+	@OneToOne
+	@JoinColumn(name="pedido_id")
+	@MapsId
 	private Pedido pedido;
 	
-	
-
 	public Pagamento() {
-		
 	}
 
-	public Pagamento(Integer id, Double estado) {
+	public Pagamento(Integer id, EstadoPagamento estado, Pedido pedido) {
 		super();
 		this.id = id;
-		this.estado = estado;
-		
+		this.estado = (estado==null) ? null : estado.getCod();
+		this.pedido = pedido;
 	}
 
 	public Integer getId() {
@@ -45,14 +49,14 @@ public class Pagamento implements Serializable {
 		this.id = id;
 	}
 
-	public Double getEstado() {
-		return estado;
+	public EstadoPagamento getEstado() {
+		return EstadoPagamento.toEnum(estado);
 	}
 
-	public void setEstado(Double estado) {
-		this.estado = estado;
+	public void setEstado(EstadoPagamento estado) {
+		this.estado = estado.getCod();
 	}
-	
+
 	public Pedido getPedido() {
 		return pedido;
 	}
@@ -63,7 +67,7 @@ public class Pagamento implements Serializable {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(estado, id);
+		return Objects.hash(id);
 	}
 
 	@Override
@@ -75,9 +79,6 @@ public class Pagamento implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Pagamento other = (Pagamento) obj;
-		return Objects.equals(estado, other.estado) && Objects.equals(id, other.id);
+		return Objects.equals(id, other.id);
 	}
-	
-	
-
 }

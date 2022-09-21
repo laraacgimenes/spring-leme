@@ -11,6 +11,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.leme.site.domain.enums.TipoRegiao;
+
 @Entity
 public class RegiaoDestino implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -21,17 +23,17 @@ public class RegiaoDestino implements Serializable {
 	private String name;
 	private Integer tipo;
 	
-	@OneToMany(mappedBy="regiaoDestino")
+	@OneToMany(mappedBy="regioes")
 	private List<CidadeDestino> cidadeDestino = new ArrayList<>();
 	
 	public RegiaoDestino() {
 	}
 
-	public RegiaoDestino(Integer id, String name, Integer tipo) {
+	public RegiaoDestino(Integer id, String name, TipoRegiao tipo) {
 		super();
 		this.id = id;
 		this.name = name;
-		this.tipo = tipo;
+		this.tipo = (tipo==null) ? null : tipo.getCod();
 	}
 
 	public Integer getId() {
@@ -50,12 +52,12 @@ public class RegiaoDestino implements Serializable {
 		this.name = name;
 	}
 
-	public Integer getTipo() {
-		return tipo;
+	public TipoRegiao getTipo() {
+		return TipoRegiao.toEnum(tipo);
 	}
 
-	public void setTipo(Integer tipo) {
-		this.tipo = tipo;
+	public void setTipo(TipoRegiao tipo) {
+		this.tipo = tipo.getCod();
 	}
 	
 	public List<CidadeDestino> getCidadeDestino() {
@@ -68,7 +70,7 @@ public class RegiaoDestino implements Serializable {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, name, tipo);
+		return Objects.hash(id);
 	}
 
 	@Override
@@ -80,7 +82,6 @@ public class RegiaoDestino implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		RegiaoDestino other = (RegiaoDestino) obj;
-		return Objects.equals(id, other.id) && Objects.equals(name, other.name) && Objects.equals(tipo, other.tipo);
+		return Objects.equals(id, other.id);
 	}
 }
-

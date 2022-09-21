@@ -1,47 +1,30 @@
 package com.leme.site.domain;
 
-import java.io.Serializable;
-import java.util.Objects;
-
 import javax.persistence.Entity;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.leme.site.domain.enums.EstadoPagamento;
+
 @Entity
-public class PagamentoComCartao implements Serializable {
+@JsonTypeName("pagamentoComCartao")
+public class PagamentoComCartao extends Pagamento {
 	private static final long serialVersionUID = 1L;
 	
-	private Integer numeroParcelas;
+	private Integer numeroDeParcelas;
 	
 	public PagamentoComCartao() {
-		
 	}
 
-	public PagamentoComCartao(Integer numeroParcelas) {
-		super();
-		this.numeroParcelas = numeroParcelas;
+	public PagamentoComCartao(Integer id, EstadoPagamento estado, Pedido pedido, Integer numeroDeParcelas) {
+		super(id, estado, pedido);
+		this.numeroDeParcelas = numeroDeParcelas;
 	}
 
-	public Integer getNumeroParcelas() {
-		return numeroParcelas;
+	public Integer getNumeroDeParcelas() {
+		return numeroDeParcelas;
 	}
 
-	public void setNumeroParcelas(Integer numeroParcelas) {
-		this.numeroParcelas = numeroParcelas;
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(numeroParcelas);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		PagamentoComCartao other = (PagamentoComCartao) obj;
-		return Objects.equals(numeroParcelas, other.numeroParcelas);
+	public void setNumeroDeParcelas(Integer numeroDeParcelas) {
+		this.numeroDeParcelas = numeroDeParcelas;
 	}
 }

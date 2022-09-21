@@ -1,6 +1,8 @@
 package com.leme.site.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import javax.persistence.Entity;
@@ -9,6 +11,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class CidadeDestino implements Serializable {
@@ -18,19 +23,26 @@ public class CidadeDestino implements Serializable {
 	@GeneratedValue(strategy=GenerationType.IDENTITY) 
 	private Integer id;
 	private String nome;
+	private String duracao;
 	private Double preco;
 	
+	@JsonIgnore
 	@ManyToOne
-	@JoinColumn(name="regiaoDestino_id")
+	@JoinColumn(name="regioes_id")
 	private RegiaoDestino regiaoDestino;
+	
+	@JsonIgnore
+	@OneToMany(mappedBy="destinos")
+	private List<Reserva> reserva = new ArrayList<>();
 	
 	public CidadeDestino() {
 	}
 	
-	public CidadeDestino(Integer id, String nome, Double preco, RegiaoDestino regiaoDestino) {
+	public CidadeDestino(Integer id, String nome, String duracao, Double preco, RegiaoDestino regiaoDestino) {
 		super();
 		this.id = id;
 		this.nome = nome;
+		this.duracao =  duracao;
 		this.preco = preco;
 		this.regiaoDestino = regiaoDestino;
 	}
@@ -65,11 +77,27 @@ public class CidadeDestino implements Serializable {
 
 	public void setRegiaoDestino(RegiaoDestino regiaoDestino) {
 		this.regiaoDestino = regiaoDestino;
-	}	
+	}
 
+	public String getDuracao() {
+		return duracao;
+	}
+
+	public void setDuracao(String duracao) {
+		this.duracao = duracao;
+	}
+	
+	public List<Reserva> getReserva() {
+		return reserva;
+	}
+
+	public void setReserva(List<Reserva> reserva) {
+		this.reserva = reserva;
+	}
+	
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, nome, preco);
+		return Objects.hash(id);
 	}
 
 	@Override
@@ -81,8 +109,6 @@ public class CidadeDestino implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		CidadeDestino other = (CidadeDestino) obj;
-		return Objects.equals(id, other.id) && Objects.equals(nome, other.nome) && Objects.equals(preco, other.preco);
-	}
-
-	
+		return Objects.equals(id, other.id);
+	}	
 }
