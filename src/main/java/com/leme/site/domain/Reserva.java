@@ -6,7 +6,9 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -41,7 +43,7 @@ public class Reserva implements Serializable {
 	private CidadeDestino cidadeDestino;
 	
 	@JsonIgnore
-	@OneToMany(mappedBy="id.reserva")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy="reservas", cascade=CascadeType.ALL)
 	private Set<ItemPedido> itens = new HashSet<>();
 	
 	public Reserva() {	

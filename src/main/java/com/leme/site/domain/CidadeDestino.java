@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -32,7 +34,7 @@ public class CidadeDestino implements Serializable {
 	private RegiaoDestino regiaoDestino;
 	
 	@JsonIgnore
-	@OneToMany(mappedBy="destinos")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy="destinos", cascade=CascadeType.ALL)
 	private List<Reserva> reserva = new ArrayList<>();
 	
 	public CidadeDestino() {

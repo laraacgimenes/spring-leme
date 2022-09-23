@@ -22,7 +22,7 @@ public class Cliente implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY) 
 	private Integer id;
-	private Integer nome;
+	private String nome;
 	private String cpf;
 	
 	@Column(unique=true)
@@ -40,7 +40,7 @@ public class Cliente implements Serializable {
 	public Cliente() {		
 	}
 
-	public Cliente(Integer id, Integer nome, String cpf, String email, String telefone) {
+	public Cliente(Integer id, String nome, String cpf, String email, String telefone) {
 		super();
 		this.id = id;
 		this.nome = nome;
@@ -57,11 +57,11 @@ public class Cliente implements Serializable {
 		this.id = id;
 	}
 
-	public Integer getNome() {
+	public String getNome() {
 		return nome;
 	}
 
-	public void setNome(Integer nome) {
+	public void setNome(String nome) {
 		this.nome = nome;
 	}
 

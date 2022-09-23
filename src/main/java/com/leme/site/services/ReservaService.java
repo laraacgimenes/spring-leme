@@ -1,5 +1,8 @@
 package com.leme.site.services;
 
-public final class ReservaService {
+import org.springframework.stereotype.Service;
 
+@Service
+public final class ReservaService {
+		
 }
